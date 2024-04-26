@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compteur de vacances</title>
+    <style>
+        body {
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column; /* Alignement vertical */
+        }
+        h1, #jour, #compteur {
+            color: white;
+            text-align: center;
+            font-size: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>BIENTOT LES VACANCES !!!!</h1>
+    <div id="jour"></div>
+    <div id="compteur"></div>
+
+    <script>
+        function mettreAJourCompteur() {
+            // Date de vos prochaines vacances (au format année, mois, jour)
+            const dateVacances = new Date(2024, 3, 30,17,30,0);
+            const maintenant = new Date();
+
+            // Calcul du temps restant
+            const tempsRestant = getTempsRestant(dateVacances)
+
+            // Afficher le temps restant sur la page
+            document.getElementById('jour').innerHTML = `${tempsRestant.jours}` + " jours";
+            document.getElementById('compteur').innerHTML = `${tempsRestant.heures}:${tempsRestant.minutes}:${tempsRestant.secondes}.${tempsRestant.millisecondes}`;
+            
+        }
+
+        function getTempsRestant(date) {
+            const maintenant = new Date();
+            const diffTemps = date.getTime() - maintenant.getTime();
+
+            // Calcul du temps restant en millisecondes
+            const jours = Math.ceil(diffTemps / (1000 * 60 * 60 * 24)); // Utiliser Math.ceil au lieu de Math.floor
+            const heures = Math.floor((diffTemps % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diffTemps % (1000 * 60 * 60)) / (1000 * 60));
+            const secondes = Math.floor((diffTemps % (1000 * 60)) / 1000);
+            const millisecondes = diffTemps % 1000;
+
+            return { jours, heures, minutes, secondes, millisecondes };
+        }
+
+        function changerCouleurArcEnCiel() {
+            const compteur = document.getElementById('compteur');
+            const jour = document.getElementById('jour');
+
+            // Générer une couleur arc-en-ciel en fonction du temps écoulé
+        
+            const hue = (new Date().getMilliseconds() / 10) % 360; // Variation de la teinte en fonction du temps
+            const couleur = `hsl(${hue}, 100%, 50%)`;
+
+            // Appliquer la couleur arc-en-ciel au texte des millisecondes
+            compteur.style.color = couleur;
+            jour.style.color = couleur;
+        }
+
+        // Changer la couleur des millisecondes en arc-en-ciel toutes les 100 millisecondes
+        setInterval(changerCouleurArcEnCiel, 100);
+
+        // Mettre à jour le compteur toutes les secondes
+        setInterval(mettreAJourCompteur, 1);
+        
+
+        // Mettre à jour le compteur lors du chargement initial de la page
+        mettreAJourCompteur();
+    </script>
+</body>
+</html>
