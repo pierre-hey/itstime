@@ -1,126 +1,101 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compteur de vacances</title>
-    <style>
-        body {
-            background-color: black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            flex-direction: column; /* Alignement vertical */
-        }
-        h1, #jour, #compteur {
-            color: white;
-            text-align: center;
-            font-size: 50px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Compteur de vacances</title>
+  <style>
+    body {
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column;
+    }
+    h1, #jour, #compteur {
+      color: white;
+      text-align: center;
+      font-size: 50px;
+    }
+  </style>
 </head>
 <body>
-    <h1 id="titleH1"></h1>
-    <div id="jour"></div>
-    <div id="compteur"></div>
+  <h1 id="titleH1"></h1>
+  <div id="jour"></div>
+  <div id="compteur"></div>
 
-    <script>
-        function mettreAJourCompteur() {
-            // Date de vos prochaines vacances (au format année, mois, jour) // 0 = janvier // 0 = 1er du mois
-            const dateVacances = new Date(2024, 7, 2,17,30,0);
-            const maintenant = new Date();
-
-        
-            // Calcul du temps restant
-            const tempsRestant = getTempsRestant(dateVacances);
-            
-
-            var jours = tempsRestant.jours;
-            var heures = tempsRestant.heures;
-            var minutes = tempsRestant.minutes;
-            var secondes = tempsRestant.secondes;
-
-            var millisecondes = tempsRestant.millisecondes;
-
-            var isHollidayTime = itsHollidayTime(secondes);
-
-            // Afficher le temps restant sur la page
-            var jourToShow = isHollidayTime ? '' : jours <= 1 ? 0 + " jours" : jours + " jours";
-            
-            var heuresToShow = heures <= 0 ? 0 : heures;
-            var heureToShowFormated = heuresToShow < 10 ? "0" + heuresToShow  : heuresToShow;
-            
-            var minutesToShow = minutes <= 0 ? 0 : minutes;
-            var minutesToShowFormated = minutesToShow < 10 ? "0" + minutesToShow : minutesToShow;
-
-            var secondesToShow = secondes <= 0 ? 0 : secondes;
-            var secondesToShowFormated = secondesToShow < 10 ? "0" + secondesToShow : secondesToShow;
-
-            var millisecondesToShow = millisecondes <= 0 ? 0 : millisecondes;
-            var millisecondesToShowFormated = millisecondesToShow < 100 & millisecondesToShow > 10 ? "0" + millisecondesToShow : millisecondesToShow < 10 ? "00" + millisecondesToShow : millisecondesToShow;
-
-
-
-            if(!isHollidayTime){
-                document.getElementById('titleH1').innerHTML ='BIENTOT LES VACANCES !!!!';
-                document.getElementById('jour').innerHTML = `${jourToShow}`;    
-                document.getElementById('compteur').innerHTML = `${heureToShowFormated}:${minutesToShowFormated}:${secondesToShowFormated}.${millisecondesToShowFormated}`;
-            }else{
-                document.getElementById('titleH1').innerHTML = "";
-                document.getElementById('jour').innerHTML ="";
-                document.getElementById('compteur').innerHTML ="C'EST LES VACANCES :)";
-            }
-            
-        }
-
-
-        function itsHollidayTime(secondes){
-           return secondes < 0;             
-        }
-
-        function getTempsRestant(date) {
-            const maintenant = new Date();
-            const diffTemps = date.getTime() - maintenant.getTime();
-
-            // Calcul du temps restant en millisecondes
-            const jours = Math.ceil(diffTemps / (1000 * 60 * 60 * 24)); // Utiliser Math.ceil au lieu de Math.floor
-
-            const heures = Math.floor((diffTemps % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diffTemps % (1000 * 60 * 60)) / (1000 * 60));
-            const secondes = Math.floor((diffTemps % (1000 * 60)) / 1000);
-            const millisecondes = diffTemps % 1000;
-
-            return { jours, heures, minutes, secondes, millisecondes };
-        }
-
-        function changerCouleurArcEnCiel() {
-            const compteur = document.getElementById('compteur');
-            const jour = document.getElementById('jour');
-            const titleH1 = document.getElementById('titleH1');
-
-            // Générer une couleur arc-en-ciel en fonction du temps écoulé
-            const hue = (new Date().getMilliseconds() / 5) % 360; // Variation de la teinte en fonction du temps
-            const hueInv = (new Date().getMilliseconds() / 20) % 360; // Variation de la teinte en fonction du temps
-            const couleur = `hsl(${hue}, 100%, 50%)`;
-            const couleurInv = `hsl(${hueInv}, 100%, 50%)`;
-
-            // Appliquer la couleur arc-en-ciel au texte des millisecondes
-            compteur.style.color = couleur;
-            jour.style.color = couleur;
-            titleH1.style.color = couleurInv;
-        }
-
-        // Changer la couleur des millisecondes en arc-en-ciel toutes les 100 millisecondes
-        setInterval(changerCouleurArcEnCiel, 100);
-
-        // Mettre à jour le compteur toutes les millisecondes
-        setInterval(mettreAJourCompteur, 1);
-        
-
-        // Mettre à jour le compteur lors du chargement initial de la page
-        mettreAJourCompteur();
-    </script>
+  <script>
+    function mettreAJourCompteur() {
+      const dateVacances = new Date(2025, 6, 4, 17, 30, 0); 
+      const maintenant = new Date();
+  
+      const tempsRestant = getTempsRestant(dateVacances);
+      const { jours, heures, minutes, secondes, millisecondes, isHolidayTime } = tempsRestant;
+  
+      const jourToShow = isHolidayTime ? "" : `${jours} jour${jours !== 1 ? "s" : ""}`;
+      const heureToShowFormated = String(Math.max(0, heures)).padStart(2, "0");
+      const minutesToShowFormated = String(Math.max(0, minutes)).padStart(2, "0");
+      const secondesToShowFormated = String(Math.max(0, secondes)).padStart(2, "0");
+      const millisecondesToShowFormated = String(Math.max(0, millisecondes)).padStart(3, "0");
+  
+      if (!isHolidayTime) {
+        document.getElementById('titleH1').innerText = 'BIENTÔT LES VACANCES !!!!';
+        document.getElementById('jour').innerText = jourToShow;
+        document.getElementById('compteur').innerText =
+          `${heureToShowFormated}:${minutesToShowFormated}:${secondesToShowFormated}.${millisecondesToShowFormated}`;
+      } else {
+        document.getElementById('titleH1').innerText = "";
+        document.getElementById('jour').innerText = "";
+        document.getElementById('compteur').innerText = "C'EST LES VACANCES :)";
+      }
+    }
+  
+    function getTempsRestant(dateCible) {
+      const maintenant = new Date();
+      let diff = dateCible.getTime() - maintenant.getTime();
+  
+      const isHolidayTime = diff <= 0;
+      if (isHolidayTime) diff = 0;
+  
+      const millisecondes = diff % 1000;
+      diff = Math.floor(diff / 1000);
+  
+      const secondes = diff % 60;
+      diff = Math.floor(diff / 60);
+  
+      const minutes = diff % 60;
+      diff = Math.floor(diff / 60);
+  
+      const heures = diff % 24;
+      const jours = Math.floor(diff / 24);
+  
+      return { jours, heures, minutes, secondes, millisecondes, isHolidayTime };
+    }
+  
+    function changerCouleurArcEnCiel() {
+      const compteur = document.getElementById('compteur');
+      const jour = document.getElementById('jour');
+      const titleH1 = document.getElementById('titleH1');
+  
+      const now = new Date();
+      const hue = (now.getMilliseconds() / 5) % 360;
+      const hueInv = (now.getMilliseconds() / 20) % 360;
+  
+      const couleur = `hsl(${hue}, 100%, 50%)`;
+      const couleurInv = `hsl(${hueInv}, 100%, 50%)`;
+  
+      compteur.style.color = couleur;
+      jour.style.color = couleur;
+      titleH1.style.color = couleurInv;
+    }
+  
+    setInterval(changerCouleurArcEnCiel, 100);
+    setInterval(mettreAJourCompteur, 10);
+  
+    mettreAJourCompteur();
+  </script>
+  
 </body>
 </html>
