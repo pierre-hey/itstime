@@ -14,10 +14,32 @@
       margin: 0;
       flex-direction: column;
     }
+
     h1, #jour, #compteur {
       color: white;
       text-align: center;
       font-size: 50px;
+    }
+
+    #imageVacances {
+      display: none;
+      width: 300px;
+      height: auto;
+      margin-top: 30px;
+    }
+
+    /* Animation de rotation */
+    @keyframes rotation {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .rotation {
+      animation: rotation 5s linear infinite;
     }
   </style>
 </head>
@@ -26,76 +48,83 @@
   <div id="jour"></div>
   <div id="compteur"></div>
 
+  <img id="imageVacances" src="vac.png" alt="Vacances!" />
+
   <script>
     function mettreAJourCompteur() {
-      const dateVacances = new Date(2025, 6, 4, 17, 30, 0); 
+      const dateVacances = new Date(2025, 6, 4, 17, 30, 0); // 2 juillet 2025 à 17:30
       const maintenant = new Date();
-  
+
       const tempsRestant = getTempsRestant(dateVacances);
       const { jours, heures, minutes, secondes, millisecondes, isHolidayTime } = tempsRestant;
-  
+
       const jourToShow = isHolidayTime ? "" : `${jours} jour${jours !== 1 ? "s" : ""}`;
       const heureToShowFormated = String(Math.max(0, heures)).padStart(2, "0");
       const minutesToShowFormated = String(Math.max(0, minutes)).padStart(2, "0");
       const secondesToShowFormated = String(Math.max(0, secondes)).padStart(2, "0");
       const millisecondesToShowFormated = String(Math.max(0, millisecondes)).padStart(3, "0");
-  
+
+      const image = document.getElementById('imageVacances');
+
       if (!isHolidayTime) {
         document.getElementById('titleH1').innerText = 'BIENTÔT LES VACANCES !!!!';
         document.getElementById('jour').innerText = jourToShow;
         document.getElementById('compteur').innerText =
           `${heureToShowFormated}:${minutesToShowFormated}:${secondesToShowFormated}.${millisecondesToShowFormated}`;
+        image.style.display = "none";
+        image.classList.remove('rotation');
       } else {
         document.getElementById('titleH1').innerText = "";
         document.getElementById('jour').innerText = "";
         document.getElementById('compteur').innerText = "C'EST LES VACANCES :)";
+        image.style.display = "block";
+        image.classList.add('rotation');
       }
     }
-  
+
     function getTempsRestant(dateCible) {
       const maintenant = new Date();
       let diff = dateCible.getTime() - maintenant.getTime();
-  
+
       const isHolidayTime = diff <= 0;
       if (isHolidayTime) diff = 0;
-  
+
       const millisecondes = diff % 1000;
       diff = Math.floor(diff / 1000);
-  
+
       const secondes = diff % 60;
       diff = Math.floor(diff / 60);
-  
+
       const minutes = diff % 60;
       diff = Math.floor(diff / 60);
-  
+
       const heures = diff % 24;
       const jours = Math.floor(diff / 24);
-  
+
       return { jours, heures, minutes, secondes, millisecondes, isHolidayTime };
     }
-  
+
     function changerCouleurArcEnCiel() {
       const compteur = document.getElementById('compteur');
       const jour = document.getElementById('jour');
       const titleH1 = document.getElementById('titleH1');
-  
+
       const now = new Date();
       const hue = (now.getMilliseconds() / 5) % 360;
       const hueInv = (now.getMilliseconds() / 20) % 360;
-  
+
       const couleur = `hsl(${hue}, 100%, 50%)`;
       const couleurInv = `hsl(${hueInv}, 100%, 50%)`;
-  
+
       compteur.style.color = couleur;
       jour.style.color = couleur;
       titleH1.style.color = couleurInv;
     }
-  
+
     setInterval(changerCouleurArcEnCiel, 100);
     setInterval(mettreAJourCompteur, 10);
-  
+
     mettreAJourCompteur();
   </script>
-  
 </body>
 </html>
